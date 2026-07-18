@@ -71,6 +71,16 @@ Each eval is answered in a fresh agent with the DataHub tools attached, then rep
 
 Needs the DataHub Cloud CLI — `pip install 'acryl-datahub-cloud[datahub-evals]'` — and a DataHub MCP server for the answering agent.
 
+#### ML Lineage
+
+Audit and protect production ML models using DataHub's end-to-end ML lineage graph (training data → features → models → deployments): catch target leakage via governance glossary terms, trace blast radius from stale upstream tables, and flag models that need a retrain.
+
+```
+> Is churn_predictor at risk of leakage?
+> /datahub-ml-lineage what breaks if raw_payments changes?
+> Does fraud_model need a retrain?
+```
+
 ### Connector development skills
 
 #### Connector planning
@@ -231,6 +241,7 @@ cp -r datahub-skills/skills/datahub-enrich           your-project/.agents/skills
 cp -r datahub-skills/skills/datahub-lineage          your-project/.agents/skills/
 cp -r datahub-skills/skills/datahub-quality          your-project/.agents/skills/
 cp -r datahub-skills/skills/datahub-setup            your-project/.agents/skills/
+cp -r datahub-skills/skills/datahub-ml-lineage       your-project/.agents/skills/
 cp -r datahub-skills/skills/shared-references        your-project/.agents/skills/
 cp -r datahub-skills/skills/using-datahub            your-project/.agents/skills/
 
@@ -265,13 +276,14 @@ Other platforms do the same things through natural language.
 
 ### Catalog interaction
 
-| Command                     | What it does                                    |
-| --------------------------- | ----------------------------------------------- |
-| `/catalog-search [query]`   | Search the catalog and answer questions         |
-| `/catalog-enrich [entity]`  | Add or update metadata                          |
-| `/catalog-lineage [entity]` | Explore lineage and trace dependencies          |
-| `/catalog-quality [entity]` | Manage assertions, incidents, and subscriptions |
-| `/catalog-setup [task]`     | Set up connection and configure defaults        |
+| Command                       | What it does                                        |
+| ----------------------------- | --------------------------------------------------- |
+| `/catalog-search [query]`     | Search the catalog and answer questions             |
+| `/catalog-enrich [entity]`    | Add or update metadata                              |
+| `/catalog-lineage [entity]`   | Explore lineage and trace dependencies              |
+| `/catalog-quality [entity]`   | Manage assertions, incidents, and subscriptions     |
+| `/catalog-setup [task]`       | Set up connection and configure defaults            |
+| `/catalog-ml-lineage [model]` | Audit ML model lineage for leakage and blast radius |
 
 ### Connector development
 
@@ -326,6 +338,10 @@ datahub-skills/
 │   │   ├── SKILL.md
 │   │   ├── references/
 │   │   └── templates/
+│   ├── datahub-ml-lineage/          # ML lineage auditing (leakage, blast radius)
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   └── templates/
 │   ├── datahub-connector-planning/  # Connector planning
 │   │   ├── SKILL.md
 │   │   ├── standards -> ../../standards
@@ -355,6 +371,7 @@ datahub-skills/
 │   ├── catalog-lineage.md
 │   ├── catalog-quality.md
 │   ├── catalog-setup.md
+│   ├── catalog-ml-lineage.md
 │   ├── connector-planning.md
 │   ├── connector-review.md
 │   └── load-standards.md
@@ -373,7 +390,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for commit conventions and release proces
 
 Where things live:
 
-- Catalog interaction skills: `skills/datahub-search/`, `skills/datahub-enrich/`, `skills/datahub-lineage/`, `skills/datahub-quality/`, `skills/datahub-setup/`
+- Catalog interaction skills: `skills/datahub-search/`, `skills/datahub-enrich/`, `skills/datahub-lineage/`, `skills/datahub-quality/`, `skills/datahub-setup/`, `skills/datahub-ml-lineage/`
 - Shared references: `skills/shared-references/`
 - Connector standards: `standards/`
 - Review checklists: `skills/datahub-connector-pr-review/SKILL.md`
